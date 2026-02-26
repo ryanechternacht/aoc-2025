@@ -39,7 +39,7 @@
             (recur (inc n))))))))
 
 ;; cursor suggested simplification
-(defn is-repeated-2? [num]
+#_(defn is-repeated-2? [num]
   (let [s (str num)
         c (count s)]
     (some #(and (zero? (mod c %))

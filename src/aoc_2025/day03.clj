@@ -16,7 +16,7 @@
 
 (defn find-largest-joltage [nums]
   (let [[i1 n1] (find-largest (butlast nums))
-        [i2 n2] (find-largest (drop (inc i1) nums))]
+        [_ n2] (find-largest (drop (inc i1) nums))]
     (parse-long (str n1 n2))))
 
 (defn solve [file]
