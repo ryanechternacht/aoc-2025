@@ -1,6 +1,5 @@
 (ns aoc-2025.day01
-  (:require [clojure.java.io :as io]
-            [clojure.string :as str])
+  (:require [clojure.string :as str])
   (:gen-class))
 
 (defn read-input [file]

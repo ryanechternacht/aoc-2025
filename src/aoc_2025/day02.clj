@@ -38,6 +38,14 @@
             true
             (recur (inc n))))))))
 
+;; cursor suggested simplification
+(defn is-repeated-2? [num]
+  (let [s (str num)
+        c (count s)]
+    (some #(and (zero? (mod c %))
+                (apply = (partition % s)))
+          (range 1 (inc (quot c 2))))))
+
 (defn solve-2 [file]
   (->> file
        parse-input
