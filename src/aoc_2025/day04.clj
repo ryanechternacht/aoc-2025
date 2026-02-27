@@ -77,7 +77,6 @@
         final
         (loop [m start
                [p & ps] start]
-          #_(Thread/sleep 10)
           (cond
             (nil? p) m
 
