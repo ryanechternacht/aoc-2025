@@ -37,12 +37,32 @@
 (defn solve-2 [file]
   (let [start (build-map file)
         final (loop [m start]
-                (println (count m))
                 (let [pred #(< (count-adjancies m %) 4)]
                   (if-let [r (some #(when (pred %) %) m)]
                     (recur (disj m r))
                     m)))]
     (- (count start) (count final))))
+
+;; runtime improvement for step 2
+(defn remove-pass [m]
+  (->> m
+       (keep #(when (< 3 (count-adjancies m %)) %))
+       set))
+
+(defn faster-solve [file]
+  (let [start (build-map file)
+        final (loop [m start
+                     last-count (count start)]
+                (let [new-m (remove-pass m)]
+                  (if (= last-count (count new-m))
+                    m
+                    (recur new-m (count new-m)))))]
+    (- (count start) (count final))))
+
+;; a faster approach would be to put all of these in a queue, 
+;; then whenever we remove one, to re-add it's neighbors to that queue
+;; for re-evaluation. after a few runs this should limit the amount
+;; of re-evaluation significantly. 
 
 (comment
   (build-map "resources/day04-sample.txt")
@@ -55,5 +75,18 @@
 
   (solve-2 "resources/day04-sample.txt")
   (solve-2 "resources/day04.txt")
-  ;
+
+  (->> "resources/day04-sample.txt"
+       build-map
+       remove-pass
+       count)
+  
+  (faster-solve "resources/day04-sample.txt")
+  (faster-solve "resources/day04.txt")
+
+  (time (solve-2 "resources/day04.txt"))
+  ; 47502.452583 msecs
+  (time (faster-solve "resources/day04.txt"))
+  ; 541.654166 msecs
+
   )
