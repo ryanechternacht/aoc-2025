@@ -12,7 +12,7 @@
         in-ranges? #(some (fn [[a b]] (<= a % b)) ranges)
         tests (->> lines
                    (drop-while seq)
-                   (drop 1)
+                   rest ;; skip blank line
                    (map parse-long))]
     {:tests tests
      :ranges ranges
