@@ -23,8 +23,7 @@
 (defn step [{:keys [beams split-count]} splitters]
   (let [splits (set/intersection beams splitters)
         new-beams (->> splits
-                       (map #(vector (inc %) (dec %)))
-                       flatten
+                       (mapcat #(list (inc %) (dec %)))
                        (into #{}))]
     {:beams (-> beams
                 (set/difference splits)
@@ -35,15 +34,12 @@
   (let [{:keys [beams steps]} (read-file file)]
     (:split-count (reduce step {:beams beams :split-count 0} steps))))
 
-(defn safe+ [& xs]
-  (reduce + (map #(if (nil? %) 0 %) xs)))
-
 (defn split-beam [beams split]
   (let [c (beams split)]
     (-> beams
         (dissoc split)
-        (update (inc split) safe+ c)
-        (update (dec split) safe+ c))))
+        (update (inc split) (fnil + 0) c)
+        (update (dec split) (fnil + 0) c))))
 
 (defn step-2 [beams splitters]
   (let [splits (set/intersection (set (keys beams)) splitters)]
@@ -51,9 +47,7 @@
 
 (defn solve-2 [file]
   (let [{:keys [beams steps]} (read-file file)
-        beam-map (->> beams
-                      (map (fn [x] {x 1}))
-                      (into {}))
+        beam-map (zipmap beams (repeat 1))
         final (reduce step-2 beam-map steps)]
     (reduce + (vals final))))
 
@@ -64,8 +58,6 @@
 
   (solve "resources/day07-sample.txt")
   (solve "resources/day07.txt")
-
-  (safe+ nil nil 2 3 nil nil)
 
   (split-beam {1 4 2 3} 1)
 
