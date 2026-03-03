@@ -43,7 +43,7 @@
 
 (defn solve-2 [file]
   (let [{:keys [ops groups]} (read-file-2 file)]
-    (reduce + (map #(apply %1 %2) ops groups))))
+    (reduce + (map apply ops groups))))
 
 (comment
   (read-file "resources/day06-sample.txt")

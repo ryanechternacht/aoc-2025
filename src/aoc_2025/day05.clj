@@ -77,7 +77,7 @@
          (reduce +))))
 
 (comment
-  (let [{:keys [tests in-ranges?]}
+  (let [{:keys [in-ranges?]}
         (read-file "resources/day05-sample.txt")]
     (in-ranges? 3))
 
