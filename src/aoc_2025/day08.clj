@@ -7,9 +7,7 @@
        slurp
        str/split-lines
        (map (fn [s]
-              (->> s
-                   (#(str/split % #","))
-                   (map parse-long))))))
+              (map parse-long (str/split s #","))))))
 
 (defn distance [[x1 y1 z1] [x2 y2 z2]]
   (Math/sqrt (+ (Math/pow (- x1 x2) 2)
@@ -25,12 +23,11 @@
       :else (compare c1 c2))))
 
 (defn generate-sorted-unique-pairs-with-distance [points]
-  (sort (fn [[_ _ d1] [_ _ d2]]
-          (< d1 d2))
-        (for [a points
-              b points
-              :when (< (compare-points a b) 0)]
-          [a b (distance a b)])))
+  (sort-by last
+           (for [a points
+                 b points
+                 :when (neg? (compare-points a b))]
+             [a b (distance a b)])))
 
 (defn create-junction [{:keys [connections max-connections junctions] :as acc} [a b]]
   (let [a-match (some #(when (% a) %) junctions)
